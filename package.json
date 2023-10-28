@@ -25,18 +25,7 @@
   "scripts": {
     "build": "rimraf dist && npm run build:types && npm run build:js",
     "build:js": "rollup -c",
-    "build:types": "tsc --emitDeclarationOnly",
-    "prepare": "husky install"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.{json,md,yml}": [
-      "prettier --write",
-      "git add"
-    ]
+    "build:types": "tsc --emitDeclarationOnly"
   },
   "dependencies": {
     "@types/ioredis": "^5.0.0",
@@ -62,7 +51,6 @@
     "@semantic-release/release-notes-generator": "10.0.3",
     "@types/lodash": "^4.14.200",
     "@types/node": "^20.8.9",
-    "husky": "8.0.0",
     "lint-staged": "12.4.2",
     "prettier": "^2.6.2",
     "rimraf": "3.0.2",
