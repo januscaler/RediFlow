@@ -1,23 +1,13 @@
 {
-  "name": "@xg4/hello",
-  "version": "0.2.1",
-  "description": "rollup boilerplate for typescript",
+  "name": "@januscaler/redi-flow",
+  "version": "1.0.0",
+  "description": "fancy redis library for redis streams,pub-sub and redis lists on top of ioredis",
   "keywords": [
-    "boilerplate",
-    "library",
-    "rollup",
-    "typescript"
+    "redis",
+    "streams"
   ],
-  "homepage": "https://github.com/xg4/rollup-typescript-boilerplate#readme",
-  "bugs": {
-    "url": "https://github.com/xg4/rollup-typescript-boilerplate/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xg4/rollup-typescript-boilerplate.git"
-  },
   "license": "MIT",
-  "author": "xg4 <xingor4@gmail.com>",
+  "author": "shivanshtalwar0 <shivanshtalwar0@gmail.com>",
   "exports": {
     ".": {
       "types": "./dist/types",
@@ -49,35 +39,36 @@
     ]
   },
   "dependencies": {
-    "lodash": "4.17.21"
+    "@types/ioredis": "^5.0.0",
+    "ioredis": "^5.3.2",
+    "lodash": "^4.17.21",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.2",
-    "@babel/preset-env": "^7.18.2",
-    "@babel/preset-typescript": "^7.17.12",
+    "@babel/core": "7.18.2",
+    "@babel/preset-env": "7.18.2",
+    "@babel/preset-typescript": "7.17.12",
     "@commitlint/cli": "17.0.3",
     "@commitlint/config-conventional": "17.0.3",
     "@rollup/plugin-babel": "5.3.1",
-    "@rollup/plugin-commonjs": "^22.0.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-commonjs": "22.0.0",
+    "@rollup/plugin-json": "4.1.0",
+    "@rollup/plugin-node-resolve": "13.3.0",
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/commit-analyzer": "9.0.2",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "8.0.4",
     "@semantic-release/npm": "9.0.1",
     "@semantic-release/release-notes-generator": "10.0.3",
-    "@types/lodash": "4.14.182",
-    "husky": "^8.0.0",
-    "lint-staged": "^12.4.2",
+    "@types/lodash": "^4.14.200",
+    "@types/node": "^20.8.9",
+    "husky": "8.0.0",
+    "lint-staged": "12.4.2",
     "prettier": "^2.6.2",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.74.1",
-    "rollup-plugin-terser": "^7.0.2",
+    "rimraf": "3.0.2",
+    "rollup": "2.74.1",
+    "rollup-plugin-terser": "7.0.2",
     "semantic-release": "19.0.3",
-    "typescript": "^4.7.2"
-  },
-  "publishConfig": {
-    "access": "public"
+    "typescript": "4.7.2"
   }
 }
