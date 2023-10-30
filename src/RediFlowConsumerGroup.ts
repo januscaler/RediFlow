@@ -41,7 +41,7 @@ export class RediFlowConsumerGroup {
     const observable = new Subject<{
       key: string
       ids: string[]
-      data: Record<string, any>
+      items: Record<string, any>[]
     }>()
 
     let isFetching = true
@@ -56,7 +56,7 @@ export class RediFlowConsumerGroup {
         const ids = _.map(messages, (message) => message[0])
         const messageItems = _.map(messages, (message) => message[1])
         const result = _.map(messageItems, this.pairedArrayToObject)
-        observable.next({ key, ids, data: result })
+        observable.next({ key, ids, items: result })
         await boom()
       } catch (error) {
         console.log(error)

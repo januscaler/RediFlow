@@ -1,6 +1,6 @@
 {
   "name": "redi-flow",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "fancy redis library for redis streams,pub-sub and redis lists on top of ioredis",
   "keywords": [
     "redis",
