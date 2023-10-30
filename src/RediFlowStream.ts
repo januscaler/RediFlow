@@ -4,9 +4,11 @@ import { RediFlowConsumerGroup } from './RediFlowConsumerGroup'
 
 export class RediFlowStream {
   protected connection: Redis
+  protected writeConnection: Redis
   streamName: string
   constructor(streamName: string, connection: Redis) {
     this.connection = connection
+    this.writeConnection = connection.duplicate()
     this.streamName = streamName
   }
   async createConsumerGroup(
@@ -20,26 +22,26 @@ export class RediFlowStream {
     const consumerGroup = new RediFlowConsumerGroup(groupName, consumerName, this.streamName, this.connection)
     const args: any[] = makeStream ? ['MKSTREAM'] : []
     try {
-      const createdGroup = await this.connection.xgroup('CREATE', this.streamName, groupName, startId, ...args)
+      const createdGroup = await this.writeConnection.xgroup('CREATE', this.streamName, groupName, startId, ...args)
     } catch (error) {}
     return consumerGroup
   }
   getLength() {
-    return this.connection.xlen(this.streamName)
+    return this.writeConnection.xlen(this.streamName)
   }
   delete(id: string[]) {
-    return this.connection.xdel(this.streamName, ...id)
+    return this.writeConnection.xdel(this.streamName, ...id)
   }
   trimByMaxLength(maxLength: number) {
-    return this.connection.xtrim(this.streamName, 'MAXLEN', '~', maxLength)
+    return this.writeConnection.xtrim(this.streamName, 'MAXLEN', '~', maxLength)
   }
   trimByMinId(minId: string) {
-    return this.connection.xtrim(this.streamName, 'MINID', '=', minId)
+    return this.writeConnection.xtrim(this.streamName, 'MINID', '=', minId)
   }
   getRange({ start, end, count, reverse }: { start: string; end: string; count?: number; reverse?: boolean }) {
     const func = reverse ? 'xrevrange' : 'xrange'
-    if (_.isNil(count)) return this.connection[func](this.streamName, start, end)
-    return this.connection[func](this.streamName, start, end, 'COUNT', count)
+    if (_.isNil(count)) return this.writeConnection[func](this.streamName, start, end)
+    return this.writeConnection[func](this.streamName, start, end, 'COUNT', count)
   }
   addToStream(map: Record<string, any>, id = '*') {
     const properties = _.transform<any, any>(
@@ -49,6 +51,6 @@ export class RediFlowStream {
       },
       []
     )
-    return this.connection.xadd(this.streamName, id, ...properties)
+    return this.writeConnection.xadd(this.streamName, id, ...properties)
   }
 }
