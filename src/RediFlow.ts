@@ -6,23 +6,19 @@ import { RediFlowStream } from './RediFlowStream'
 
 export class RediFlow {
   protected connection: Redis
-  protected publisherConnection: Redis
-  protected subscriberConnection: Redis
-  constructor(public port: number, public host: string, public options: RedisOptions) {
+  constructor(public options: RedisOptions) {
     this.connection = this.factory()
-    this.publisherConnection = this.factory()
-    this.subscriberConnection = this.factory()
-    this.subscriberConnection.on('message', (channel, message) => {
+    this.connection.duplicate().on('message', (channel, message) => {
       this.messageObservable.next({ channel, message })
     })
   }
 
   createList(listName: string) {
-    return new RediFlowList(listName, this.connection)
+    return new RediFlowList(listName, this.connection.duplicate())
   }
 
   createStream(streamName: string) {
-    return new RediFlowStream(streamName, this.connection)
+    return new RediFlowStream(streamName, this.connection.duplicate())
   }
 
   async setJsonObject(key: string, value: any = {}) {
@@ -43,11 +39,11 @@ export class RediFlow {
   }>()
 
   async publish(channel: string, message: string | Buffer) {
-    return this.publisherConnection.publish(channel, message)
+    return this.connection.duplicate().publish(channel, message)
   }
 
   async publishJson(channel: string, message: any) {
-    return this.publisherConnection.publish(channel, JSON.stringify(message))
+    return this.connection.duplicate().publish(channel, JSON.stringify(message))
   }
 
   async subscribe(channels: string[]) {
@@ -55,14 +51,14 @@ export class RediFlow {
       channel: string
       message: string
     }>()
-    await this.subscriberConnection.subscribe(...channels)
+    await this.connection.duplicate().subscribe(...channels)
     const subscription = this.messageObservable.subscribe(({ channel, message }) => {
       if (channels.includes(channel)) {
         currentObservable.next({ channel, message })
       }
     })
     const unsubscribe = async () => {
-      await this.subscriberConnection.unsubscribe(...channels)
+      await this.connection.duplicate().unsubscribe(...channels)
       subscription.unsubscribe()
     }
     return { consumer: currentObservable, unsubscribe }
@@ -70,20 +66,20 @@ export class RediFlow {
 
   async subscribeJson(channels: string[]) {
     const currentObservable = new Subject<{ channel: string; message: any }>()
-    await this.subscriberConnection.subscribe(...channels)
+    await this.connection.duplicate().subscribe(...channels)
     const subscription = this.messageObservable.subscribe(({ channel, message }) => {
       if (channels.includes(channel)) {
         currentObservable.next({ channel, message: JSON.parse(message) })
       }
     })
     const unsubscribe = async () => {
-      await this.subscriberConnection.unsubscribe(...channels)
+      await this.connection.duplicate().unsubscribe(...channels)
       subscription.unsubscribe()
     }
     return { consumer: currentObservable, unsubscribe }
   }
 
-  factory(overrideOptions?: RedisOptions) {
-    return new Redis(this.port, this.host, this.options).duplicate(overrideOptions)
+  factory() {
+    return new Redis(this.options)
   }
 }
