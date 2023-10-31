@@ -8,9 +8,7 @@ export class RediFlow {
   protected connection: Redis
   protected publisherConnection: Redis
   protected subscriberConnection: Redis
-  config: RedisOptions
-  constructor(config: RedisOptions) {
-    this.config = config
+  constructor(public port: number, public host: string, public options: RedisOptions) {
     this.connection = this.factory()
     this.publisherConnection = this.factory()
     this.subscriberConnection = this.factory()
@@ -85,7 +83,7 @@ export class RediFlow {
     return { consumer: currentObservable, unsubscribe }
   }
 
-  factory() {
-    return new Redis({ ...this.config })
+  factory(overrideOptions?: RedisOptions) {
+    return new Redis(this.port, this.host, this.options).duplicate(overrideOptions)
   }
 }
