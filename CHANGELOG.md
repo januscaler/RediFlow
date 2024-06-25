@@ -1,6 +1,7 @@
 ## [1.0.5]
 
 fixes and improvements
+
 ## [1.0.4]
 
 fixes and improvements
