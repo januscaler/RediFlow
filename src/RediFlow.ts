@@ -4,6 +4,12 @@ import { Buffer } from 'buffer'
 import { RediFlowList } from './RediFlowList'
 import { RediFlowStream } from './RediFlowStream'
 
+/**
+ *  My Lib 
+ * @example
+ * dshhbsd
+ *
+  */
 export class RediFlow {
   protected connection: Redis
   constructor(public options: RedisOptions) {

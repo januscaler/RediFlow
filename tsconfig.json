@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "removeComments": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": false,
